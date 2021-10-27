@@ -9,5 +9,6 @@ description = "Command line client for HP ProCurve 1810G network switches"
 [dependencies]
 anyhow = "1.0"
 clap = "2"
+reqwest = { version = "0.11", features = ["blocking", "cookies", "multipart"] }
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
