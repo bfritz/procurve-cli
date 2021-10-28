@@ -1,6 +1,7 @@
 use anyhow::{anyhow, bail, Context, Result};
-use reqwest::blocking::{multipart, Client};
+use reqwest::blocking::Client;
 use scraper::{ElementRef, Html, Selector};
+use std::collections::HashMap;
 use std::env;
 
 pub struct ProCurveClient {
@@ -21,11 +22,11 @@ impl ProCurveClient {
             .cookie_store(true)
             .build()?;
 
-        let login_form = multipart::Form::new().text("pwd", "");
+        let login_form = HashMap::from([("pwd", "")]);
 
         let res = client
             .post(self.url.clone() + "/hp_login.html")
-            .multipart(login_form)
+            .form(&login_form)
             .send()?;
 
         let session_cookie = res.cookies().filter(|c| c.name() == "SID").next();
