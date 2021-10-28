@@ -1,5 +1,6 @@
-use anyhow::{anyhow, Context, Result};
+use anyhow::{anyhow, bail, Context, Result};
 use reqwest::blocking::{multipart, Client};
+use scraper::{ElementRef, Html, Selector};
 use std::env;
 
 pub struct ProCurveClient {
@@ -37,6 +38,7 @@ impl ProCurveClient {
             }
             None => {
                 println!("no session cookie");
+                dbg!(&res);
                 Err(anyhow!("could not login"))
             }
         }
@@ -44,12 +46,54 @@ impl ProCurveClient {
 
     pub fn describe_switch(&mut self) -> Result<()> {
         let client = self.login()?;
-        let mut res = client
+        let res = client
             .get(self.url.clone() + "/SysDescription.html")
             .send()?;
 
+        if !res.status().is_success() {
+            bail!("Could not retrieve switch description.  HTTP status: {}", res.status())
+        }
+
+        let body = res.text()?;
+        let document = Html::parse_document(&body);
+
+        let input_seletor = Selector::parse("input").unwrap();
+        let mut inputs = document.select(&input_seletor);
+
+        let description = Description {
+            description: value_attribute(inputs.next()),
+            name: value_attribute(inputs.next()),
+            location: value_attribute(inputs.next()),
+            contact: value_attribute(inputs.next()),
+            version: value_attribute(inputs.next()),
+            object_id: value_attribute(inputs.next()),
+            uptime: value_attribute(inputs.next()),
+            current_time: value_attribute(inputs.next()),
+            current_date: value_attribute(inputs.next()),
+        };
+
         // FIXME: parse HTML and display reasonable output
-        res.copy_to(&mut std::io::stdout())?;
+        println!("{:?}", description);
         Ok(())
     }
+}
+
+fn value_attribute(element: Option<ElementRef>) -> &str {
+    match element {
+        Some(e) => e.value().attr("value").unwrap_or("").trim(),
+        None => "",
+    }
+}
+
+#[derive(Debug)]
+struct Description<'a> {
+    description: &'a str,
+    name: &'a str,
+    location: &'a str,
+    contact: &'a str,
+    version: &'a str,
+    object_id: &'a str,
+    uptime: &'a str,
+    current_time: &'a str,
+    current_date: &'a str,
 }
