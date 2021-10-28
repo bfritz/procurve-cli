@@ -856,7 +856,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "procurve_cli"
+name = "procurve-cli"
 version = "0.1.0"
 dependencies = [
  "anyhow",
