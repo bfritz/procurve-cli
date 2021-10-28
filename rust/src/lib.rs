@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate prettytable;
+
 use anyhow::{anyhow, bail, Context, Result};
 use reqwest::blocking::Client;
 use scraper::{ElementRef, Html, Selector};
@@ -73,8 +76,16 @@ impl ProCurveClient {
             current_date: value_attribute(inputs.next()),
         };
 
-        // FIXME: parse HTML and display reasonable output
-        println!("{:?}", description);
+        ptable!(
+            [b->"Description", description.description],
+            [b->"Name", description.name],
+            [b->"Location", description.location],
+            [b->"Contact", description.contact],
+            [b->"Version", description.version],
+            [b->"Object ID", description.object_id],
+            [b->"Uptime", description.uptime],
+            [b->"Current Time", description.current_time],
+            [b->"Current Date", description.current_date]);
         Ok(())
     }
 }

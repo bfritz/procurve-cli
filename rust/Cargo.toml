@@ -9,6 +9,7 @@ description = "Command line client for HP ProCurve 1810G network switches"
 [dependencies]
 anyhow = "1.0"
 clap = "2"
+prettytable-rs = "0.8"
 reqwest = { version = "0.11", features = ["blocking", "cookies", "multipart"] }
 scraper = "0.12"
 
