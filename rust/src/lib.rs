@@ -32,7 +32,7 @@ impl ProCurveClient {
             .form(&login_form)
             .send()?;
 
-        let session_cookie = res.cookies().filter(|c| c.name() == "SID").next();
+        let session_cookie = res.cookies().find(|c| c.name() == "SID");
 
         match session_cookie {
             // FIXME: use proper logging, not println!()
