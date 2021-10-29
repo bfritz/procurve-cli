@@ -1,7 +1,7 @@
 # ProCurve 1810G Switch Command Line Interface
 
 <!-- badges -->
-![continuous integration status](https://github.com/bfritz/procurve-cli/actions/workflows/ci.yaml/badge.svg)
+[![continuous integration status](https://github.com/bfritz/procurve-cli/actions/workflows/ci.yaml/badge.svg)](https://github.com/bfritz/procurve-cli/actions/workflows/ci.yaml)
 [![Bors enabled](https://bors.tech/images/badge_small.svg)](https://app.bors.tech/repositories/38965)
 
 ## Preface
