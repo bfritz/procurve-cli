@@ -2,6 +2,7 @@
 
 <!-- badges -->
 ![continuous integration status](https://github.com/bfritz/procurve-cli/actions/workflows/ci.yaml/badge.svg)
+[![Bors enabled](https://bors.tech/images/badge_small.svg)](https://app.bors.tech/repositories/38965)
 
 ## Preface
 
