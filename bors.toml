@@ -1,0 +1,6 @@
+status = [
+  "Format",
+  "Check",
+  "Unit Test",
+  "CLI Binary"
+]
