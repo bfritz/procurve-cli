@@ -55,7 +55,10 @@ impl ProCurveClient {
             .send()?;
 
         if !res.status().is_success() {
-            bail!("Could not retrieve switch description.  HTTP status: {}", res.status())
+            bail!(
+                "Could not retrieve switch description.  HTTP status: {}",
+                res.status()
+            )
         }
 
         let body = res.text()?;
@@ -79,7 +82,7 @@ fn html_to_description(body: &str) -> Result<Description> {
         version: value_attribute(inputs.next(), "version")?,
         object_id: value_attribute(inputs.next(), "object_id")?,
         uptime: value_attribute(inputs.next(), "uptime")?,
-            current_time: value_attribute(inputs.next(), "current_time")?,
+        current_time: value_attribute(inputs.next(), "current_time")?,
         current_date: value_attribute(inputs.next(), "current_date")?,
     };
 
@@ -89,7 +92,7 @@ fn html_to_description(body: &str) -> Result<Description> {
 fn value_attribute<'a>(element: Option<ElementRef>, field_name: &str) -> Result<String> {
     match element {
         Some(e) => Ok(e.value().attr("value").unwrap_or("").trim().to_string()),
-        None => bail!("HTML element for field {} not found", field_name)
+        None => bail!("HTML element for field {} not found", field_name),
     }
 }
 
@@ -129,10 +132,15 @@ mod tests {
     #[test]
     fn parses_description_html_correctly() {
         let body = std::fs::read_to_string("../samples/SysDescription.html")
-            .with_context(|| "opening samples/SysDescription.html").unwrap();
+            .with_context(|| "opening samples/SysDescription.html")
+            .unwrap();
         let description = html_to_description(&body)
-            .with_context(|| "converting SysDescription.html into Description struct").unwrap();
-        assert_eq!(description.description, "HP ProCurve 1810G - 8 GE, P.2.22, eCos-2.0, CFE-2.1");
+            .with_context(|| "converting SysDescription.html into Description struct")
+            .unwrap();
+        assert_eq!(
+            description.description,
+            "HP ProCurve 1810G - 8 GE, P.2.22, eCos-2.0, CFE-2.1"
+        );
         assert_eq!(description.name, "PROCURVE J9449A");
         assert_eq!(description.contact, "");
         assert_eq!(description.location, "");

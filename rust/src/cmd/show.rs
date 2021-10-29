@@ -7,8 +7,8 @@ pub fn make_subcommand<'a, 'b>() -> App<'a, 'b> {
     SubCommand::with_name("show")
         .about("Shows switch settings")
         .subcommand(
-            App::new("description")
-                .about("Show model, firmware version, contact info, etc."))
+            App::new("description").about("Show model, firmware version, contact info, etc."),
+        )
 }
 
 pub fn execute(args: &ArgMatches) -> Result<()> {
