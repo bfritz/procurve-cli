@@ -1,5 +1,8 @@
 # ProCurve 1810G Switch Command Line Interface
 
+<!-- badges -->
+![continuous integration status](https://github.com/bfritz/procurve-cli/actions/workflows/ci.yaml/badge.svg)
+
 ## Preface
 
 **Beware:** The code in this repo is all experimental.  One of the primary
