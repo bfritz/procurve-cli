@@ -6,7 +6,7 @@
 
 ## Preface
 
-**Beware:** The code in this repo is all experimental.  One of the primary
+**_Beware:_** The code in this repo is all experimental.  One of the primary
 goals is to gain experience with [Rust].  Consider the code alpha quality and
 assume that it is poorly written and not idiomatic.
 
