@@ -9,6 +9,8 @@ mod cmd;
 const VERSION: &str = concat!("v", crate_version!());
 
 fn main() -> Result<()> {
+    env_logger::init();
+
     let app = create_clap_app();
 
     match app.get_matches().subcommand() {
