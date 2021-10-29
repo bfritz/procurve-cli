@@ -35,14 +35,12 @@ impl ProCurveClient {
         let session_cookie = res.cookies().find(|c| c.name() == "SID");
 
         match session_cookie {
-            // FIXME: use proper logging, not println!()
             Some(_) => {
-                println!("found session cookie");
+                log::debug!("Found session cookie in login response.");
                 Ok(client)
             }
             None => {
-                println!("no session cookie");
-                dbg!(&res);
+                log::error!("Did not find session cookie in login response.\n{:?}", &res);
                 Err(anyhow!("could not login"))
             }
         }

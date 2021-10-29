@@ -1,4 +1,5 @@
 SWITCH_URL ?= http://192.168.42.2
+RUST_LOG ?= info
 
 .PHONY: \
 	all \
@@ -15,4 +16,5 @@ test-rust:
 	cargo test --manifest-path rust/Cargo.toml
 
 run-rust: rust
-	SWITCH_URL=$(SWITCH_URL) ./rust/target/release/procurve-cli show description
+	RUST_LOG=$(RUST_LOG) SWITCH_URL=$(SWITCH_URL) \
+		 ./rust/target/release/procurve-cli show description
