@@ -21,7 +21,7 @@ Assuming:
 
 * [make] along with [Cargo and Rust] are already installed,
 * your switch web interface is at http://192.168.3.4/ , and
-* you are on Linux, or something, system:
+* you are on a Linux (or similar) system:
 
 ```sh
 SWITCH_URL=http://192.168.3.4 make run-rust
