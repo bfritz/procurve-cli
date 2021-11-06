@@ -116,18 +116,14 @@ fn print_description_as_table(description: Description) -> Result<usize> {
 
 #[cfg(test)]
 mod tests {
-    use anyhow::Context;
-
     use super::html_to_description;
 
     #[test]
     fn parses_description_html_correctly() {
         let body = std::fs::read_to_string("../samples/SysDescription.html")
-            .with_context(|| "opening samples/SysDescription.html")
-            .unwrap();
+            .expect("file open: samples/SysDescription.html");
         let description = html_to_description(&body)
-            .with_context(|| "converting SysDescription.html into Description struct")
-            .unwrap();
+            .expect("convert SysDescription.html into Description struct");
         assert_eq!(
             description.description,
             "HP ProCurve 1810G - 8 GE, P.2.22, eCos-2.0, CFE-2.1"
