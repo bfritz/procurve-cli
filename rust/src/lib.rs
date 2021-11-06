@@ -70,7 +70,7 @@ impl ProCurveClient {
 }
 
 fn html_to_description(body: &str) -> Result<Description> {
-    let document = Html::parse_document(&body);
+    let document = Html::parse_document(body);
 
     let input_seletor = Selector::parse("input").unwrap();
     let mut inputs = document.select(&input_seletor);
@@ -90,7 +90,7 @@ fn html_to_description(body: &str) -> Result<Description> {
     Ok(description)
 }
 
-fn value_attribute<'a>(element: Option<ElementRef>, field_name: &str) -> Result<String> {
+fn value_attribute(element: Option<ElementRef>, field_name: &str) -> Result<String> {
     match element {
         Some(e) => Ok(e.value().attr("value").unwrap_or("").trim().to_string()),
         None => bail!("HTML element for field {} not found", field_name),
