@@ -7,6 +7,9 @@ use scraper::{ElementRef, Html, Selector};
 use std::collections::HashMap;
 use std::env;
 
+mod model;
+use model::description::Description;
+
 pub struct ProCurveClient {
     // The HTTP or HTTPS URL to the switch's web management page, [`SWITCH_URL`] by default.
     pub url: String,
@@ -109,19 +112,6 @@ fn print_description_as_table(description: Description) -> Result<usize> {
         [b->"Current Time", description.current_time],
         [b->"Current Date", description.current_date]);
     Ok(table.printstd())
-}
-
-#[derive(Debug)]
-struct Description {
-    description: String,
-    name: String,
-    location: String,
-    contact: String,
-    version: String,
-    object_id: String,
-    uptime: String,
-    current_time: String,
-    current_date: String,
 }
 
 #[cfg(test)]
