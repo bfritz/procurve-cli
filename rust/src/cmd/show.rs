@@ -12,7 +12,7 @@ pub fn make_subcommand<'a, 'b>() -> App<'a, 'b> {
 }
 
 pub fn execute(args: &ArgMatches) -> Result<()> {
-    let mut client = ProCurveClient::from_env()?;
+    let mut client = ProCurveClient::new()?;
 
     match args.subcommand() {
         ("description", Some(_)) => client.describe_switch(),

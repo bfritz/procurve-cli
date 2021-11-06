@@ -13,7 +13,7 @@ pub struct ProCurveClient {
 }
 
 impl ProCurveClient {
-    pub fn from_env() -> Result<Self> {
+    pub fn new() -> Result<Self> {
         Ok(ProCurveClient {
             url: env::var("SWITCH_URL")
                 .with_context(|| "SWITCH_URL environment variable missing")?,
