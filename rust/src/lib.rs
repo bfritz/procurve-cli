@@ -20,6 +20,14 @@ impl ProCurveClient {
         })
     }
 
+    fn login_url(&self) -> String {
+        format!("{}/hp_login.html", &self.url)
+    }
+
+    fn description_url(&self) -> String {
+        format!("{}/SysDescription.html", &self.url)
+    }
+
     fn login(&mut self) -> Result<Client> {
         let client = reqwest::blocking::Client::builder()
             .cookie_store(true)
@@ -27,10 +35,7 @@ impl ProCurveClient {
 
         let login_form = HashMap::from([("pwd", "")]);
 
-        let res = client
-            .post(self.url.clone() + "/hp_login.html")
-            .form(&login_form)
-            .send()?;
+        let res = client.post(self.login_url()).form(&login_form).send()?;
 
         let session_cookie = res.cookies().find(|c| c.name() == "SID");
 
@@ -48,9 +53,7 @@ impl ProCurveClient {
 
     pub fn describe_switch(&mut self) -> Result<()> {
         let client = self.login()?;
-        let res = client
-            .get(self.url.clone() + "/SysDescription.html")
-            .send()?;
+        let res = client.get(self.description_url()).send()?;
 
         if !res.status().is_success() {
             bail!(
