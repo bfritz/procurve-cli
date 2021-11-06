@@ -7,17 +7,28 @@ use scraper::{ElementRef, Html, Selector};
 use std::collections::HashMap;
 use std::env;
 
+mod model;
+use model::description::Description;
+
 pub struct ProCurveClient {
     // The HTTP or HTTPS URL to the switch's web management page, [`SWITCH_URL`] by default.
     pub url: String,
 }
 
 impl ProCurveClient {
-    pub fn from_env() -> Result<Self> {
+    pub fn new() -> Result<Self> {
         Ok(ProCurveClient {
             url: env::var("SWITCH_URL")
                 .with_context(|| "SWITCH_URL environment variable missing")?,
         })
+    }
+
+    fn login_url(&self) -> String {
+        format!("{}/hp_login.html", &self.url)
+    }
+
+    fn description_url(&self) -> String {
+        format!("{}/SysDescription.html", &self.url)
     }
 
     fn login(&mut self) -> Result<Client> {
@@ -27,10 +38,7 @@ impl ProCurveClient {
 
         let login_form = HashMap::from([("pwd", "")]);
 
-        let res = client
-            .post(self.url.clone() + "/hp_login.html")
-            .form(&login_form)
-            .send()?;
+        let res = client.post(self.login_url()).form(&login_form).send()?;
 
         let session_cookie = res.cookies().find(|c| c.name() == "SID");
 
@@ -48,9 +56,7 @@ impl ProCurveClient {
 
     pub fn describe_switch(&mut self) -> Result<()> {
         let client = self.login()?;
-        let res = client
-            .get(self.url.clone() + "/SysDescription.html")
-            .send()?;
+        let res = client.get(self.description_url()).send()?;
 
         if !res.status().is_success() {
             bail!(
@@ -67,7 +73,7 @@ impl ProCurveClient {
 }
 
 fn html_to_description(body: &str) -> Result<Description> {
-    let document = Html::parse_document(&body);
+    let document = Html::parse_document(body);
 
     let input_seletor = Selector::parse("input").unwrap();
     let mut inputs = document.select(&input_seletor);
@@ -87,7 +93,7 @@ fn html_to_description(body: &str) -> Result<Description> {
     Ok(description)
 }
 
-fn value_attribute<'a>(element: Option<ElementRef>, field_name: &str) -> Result<String> {
+fn value_attribute(element: Option<ElementRef>, field_name: &str) -> Result<String> {
     match element {
         Some(e) => Ok(e.value().attr("value").unwrap_or("").trim().to_string()),
         None => bail!("HTML element for field {} not found", field_name),
@@ -106,19 +112,6 @@ fn print_description_as_table(description: Description) -> Result<usize> {
         [b->"Current Time", description.current_time],
         [b->"Current Date", description.current_date]);
     Ok(table.printstd())
-}
-
-#[derive(Debug)]
-struct Description {
-    description: String,
-    name: String,
-    location: String,
-    contact: String,
-    version: String,
-    object_id: String,
-    uptime: String,
-    current_time: String,
-    current_date: String,
 }
 
 #[cfg(test)]
