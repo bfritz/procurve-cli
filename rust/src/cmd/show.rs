@@ -9,6 +9,7 @@ pub fn make_subcommand<'a, 'b>() -> App<'a, 'b> {
         .subcommand(
             App::new("description").about("Show model, firmware version, contact info, etc."),
         )
+        .subcommand(App::new("vlans").about("Show VLAN configuration."))
 }
 
 pub fn execute(args: &ArgMatches) -> Result<()> {
@@ -16,6 +17,7 @@ pub fn execute(args: &ArgMatches) -> Result<()> {
 
     match args.subcommand() {
         ("description", Some(_)) => client.describe_switch(),
+        ("vlans", Some(_)) => client.describe_vlans(),
         (_, _) => unreachable!(),
     }
 }
