@@ -1,10 +1,10 @@
 use anyhow::Result;
 use procurve_cli::ProCurveClient;
 
-use clap::{App, ArgMatches, SubCommand};
+use clap::{App, ArgMatches};
 
-pub fn make_subcommand<'a, 'b>() -> App<'a, 'b> {
-    SubCommand::with_name("show")
+pub fn make_subcommand<'a>() -> App<'a> {
+    App::new("show")
         .about("Shows switch settings")
         .subcommand(
             App::new("description").about("Show model, firmware version, contact info, etc."),
@@ -16,8 +16,8 @@ pub fn execute(args: &ArgMatches) -> Result<()> {
     let mut client = ProCurveClient::new()?;
 
     match args.subcommand() {
-        ("description", Some(_)) => client.describe_switch(),
-        ("vlans", Some(_)) => client.describe_vlans(),
-        (_, _) => unreachable!(),
+        Some(("description", _)) => client.describe_switch(),
+        Some(("vlans", _)) => client.describe_vlans(),
+        _ => unreachable!(),
     }
 }

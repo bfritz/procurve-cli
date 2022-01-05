@@ -14,17 +14,16 @@ fn main() -> Result<()> {
     let app = create_clap_app();
 
     match app.get_matches().subcommand() {
-        ("show", Some(sub_matches)) => cmd::show::execute(sub_matches),
-        (_, _) => unreachable!(),
+        Some(("show", sub_matches)) => cmd::show::execute(sub_matches),
+        _ => unreachable!(),
     }
 }
 
-fn create_clap_app<'a, 'b>() -> App<'a, 'b> {
+fn create_clap_app<'a>() -> App<'a> {
     App::new(crate_name!())
         .about(crate_description!())
         .version(VERSION)
-        .setting(AppSettings::GlobalVersion)
+        .setting(AppSettings::PropagateVersion)
         .setting(AppSettings::ArgRequiredElseHelp)
-        .setting(AppSettings::ColoredHelp)
         .subcommand(cmd::show::make_subcommand())
 }
