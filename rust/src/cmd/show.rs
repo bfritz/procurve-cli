@@ -1,11 +1,12 @@
 use anyhow::Result;
 use procurve_cli::ProCurveClient;
 
-use clap::{App, ArgMatches};
+use clap::{App, AppSettings, ArgMatches};
 
 pub fn make_subcommand<'a>() -> App<'a> {
     App::new("show")
         .about("Shows switch settings")
+        .setting(AppSettings::SubcommandRequiredElseHelp)
         .subcommand(
             App::new("description").about("Show model, firmware version, contact info, etc."),
         )
