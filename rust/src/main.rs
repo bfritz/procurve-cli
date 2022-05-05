@@ -2,7 +2,7 @@
 extern crate clap;
 
 use anyhow::Result;
-use clap::{App, AppSettings};
+use clap::Command;
 
 mod cmd;
 
@@ -19,11 +19,11 @@ fn main() -> Result<()> {
     }
 }
 
-fn create_clap_app<'a>() -> App<'a> {
-    App::new(crate_name!())
+fn create_clap_app<'a>() -> Command<'a> {
+    Command::new(crate_name!())
         .about(crate_description!())
         .version(VERSION)
-        .setting(AppSettings::PropagateVersion)
-        .setting(AppSettings::ArgRequiredElseHelp)
+        .propagate_version(true)
+        .arg_required_else_help(true)
         .subcommand(cmd::show::make_subcommand())
 }
