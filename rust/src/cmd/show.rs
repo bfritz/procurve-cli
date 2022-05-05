@@ -1,16 +1,17 @@
 use anyhow::Result;
 use procurve_cli::ProCurveClient;
 
-use clap::{App, AppSettings, ArgMatches};
+use clap::{ArgMatches, Command};
 
-pub fn make_subcommand<'a>() -> App<'a> {
-    App::new("show")
+pub fn make_subcommand<'a>() -> Command<'a> {
+    Command::new("show")
         .about("Shows switch settings")
-        .setting(AppSettings::SubcommandRequiredElseHelp)
+        .subcommand_required(true)
+        .arg_required_else_help(true)
         .subcommand(
-            App::new("description").about("Show model, firmware version, contact info, etc."),
+            Command::new("description").about("Show model, firmware version, contact info, etc."),
         )
-        .subcommand(App::new("vlans").about("Show VLAN configuration."))
+        .subcommand(Command::new("vlans").about("Show VLAN configuration."))
 }
 
 pub fn execute(args: &ArgMatches) -> Result<()> {
