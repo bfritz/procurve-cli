@@ -208,7 +208,7 @@ fn value_attribute(element: &Option<ElementRef>, field_name: &str) -> Result<Str
     }
 }
 
-fn print_description_as_table(description: &Description) -> Result<usize> {
+fn print_description_as_table(description: &Description) -> Result<()> {
     let table = table!(
         [b->"Description", description.description],
         [b->"Name", description.name],
@@ -225,7 +225,7 @@ fn print_description_as_table(description: &Description) -> Result<usize> {
 fn print_vlans_as_table(
     vlans: &[Vlan],
     port_participation: &HashMap<u16, VlanPortParticipation>,
-) -> Result<usize> {
+) -> Result<()> {
     let mut table = Table::new();
     let mut header_row = Row::empty();
     header_row.add_cell(cell![b->"VLAN ID"]);
